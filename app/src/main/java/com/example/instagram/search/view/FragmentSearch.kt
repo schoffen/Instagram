@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.databinding.FragmentSearchBinding
 
-class FragmentSearch : Fragment() {
+class FragmentSearch : Fragment(R.layout.fragment_search) {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var binding: FragmentSearchBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,21 +23,13 @@ class FragmentSearch : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSearchBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rv = binding.searchRv
-        rv.layoutManager = LinearLayoutManager(requireContext())
-        rv.adapter = PostAdapter()
+        binding = FragmentSearchBinding.bind(view)
+
+        binding?.searchRv?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.searchRv?.adapter = PostAdapter()
     }
 
     private class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {

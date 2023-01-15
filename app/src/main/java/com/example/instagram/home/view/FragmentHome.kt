@@ -10,9 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.databinding.FragmentHomeBinding
 
-class FragmentHome : Fragment() {
+class FragmentHome : Fragment(R.layout.fragment_home) {
 
-    private lateinit var binding: FragmentHomeBinding
+    private var binding: FragmentHomeBinding? = null
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,21 +29,13 @@ class FragmentHome : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rv = binding.homeRv
-        rv.layoutManager = LinearLayoutManager(requireContext())
-        rv.adapter = PostAdapter()
+        binding = FragmentHomeBinding.bind(view)
+
+        binding?.homeRv?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.homeRv?.adapter = PostAdapter()
     }
 
     private class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {

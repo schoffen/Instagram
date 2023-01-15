@@ -9,9 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.databinding.FragmentProfileBinding
 
-class FragmentProfile : Fragment() {
+class FragmentProfile : Fragment(R.layout.fragment_profile) {
 
-    private lateinit var binding: FragmentProfileBinding
+    private var binding: FragmentProfileBinding? = null
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,21 +28,13 @@ class FragmentProfile : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentProfileBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rv = binding.profileRv
-        rv.layoutManager = GridLayoutManager(requireContext(), 3)
-        rv.adapter = PostAdapter()
+        binding = FragmentProfileBinding.bind(view)
+
+        binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding?.profileRv?.adapter = PostAdapter()
     }
 
     private class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {

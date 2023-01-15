@@ -11,21 +11,19 @@ import com.example.instagram.R
 import com.example.instagram.common.view.CustomDialog
 import com.example.instagram.databinding.FragmentRegisterPhotoBinding
 
-class RegisterPhotoFragment : Fragment() {
+class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
 
-    private lateinit var binding: FragmentRegisterPhotoBinding
+    private var binding: FragmentRegisterPhotoBinding? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRegisterPhotoBinding.inflate(layoutInflater, container, false)
-        return binding.root
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding = FragmentRegisterPhotoBinding.bind(view)
 
         val customDialog = CustomDialog(requireContext())
 
