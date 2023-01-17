@@ -1,14 +1,19 @@
 package com.example.instagram.login.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.example.instagram.common.util.TxtWatcher
 import com.example.instagram.databinding.ActivityLoginBinding
 import com.example.instagram.login.Login
+import com.example.instagram.login.data.FakeDataSource
+import com.example.instagram.login.data.LoginRepository
 import com.example.instagram.login.presentation.LoginPresenter
+import com.example.instagram.main.view.MainActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
@@ -23,7 +28,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
         setContentView(binding.root)
 
-        presenter = LoginPresenter(this)
+        val repository = LoginRepository(FakeDataSource())
+        presenter = LoginPresenter(this, repository)
 
         with(binding) {
             loginEditEmail.addTextChangedListener(watcher)
@@ -38,10 +44,6 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
             loginBtnEnter.setOnClickListener {
                 presenter.login(loginEditEmail.text.toString(), loginEditPassword.text.toString())
-
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    loginBtnEnter.showProgress(false)
-//                }, 2000)
             }
         }
     }
@@ -57,7 +59,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showProgress(enabled: Boolean) {
-        binding.loginBtnEnter.showProgress(true)
+        binding.loginBtnEnter.showProgress(enabled)
     }
 
     override fun displayEmailFailure(emailError: Int?) {
@@ -69,10 +71,12 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun onUserAuthenticated() {
-        // Ir para tela principal
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
-    override fun onUserUnauthorized() {
-        // mostrar alerta
+    override fun onUserUnauthorized(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
