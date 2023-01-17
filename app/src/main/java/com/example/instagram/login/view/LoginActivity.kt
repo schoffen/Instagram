@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
+import androidx.core.widget.addTextChangedListener
+import com.example.instagram.common.util.TxtWatcher
 import com.example.instagram.databinding.ActivityLoginBinding
+import com.example.instagram.login.Login
+import com.example.instagram.login.presentation.LoginPresenter
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), Login.View {
 
     private lateinit var binding: ActivityLoginBinding
+
+    override lateinit var presenter: Login.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,30 +23,56 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        presenter = LoginPresenter(this)
+
         with(binding) {
             loginEditEmail.addTextChangedListener(watcher)
+            loginEditEmail.addTextChangedListener(TxtWatcher {
+                displayEmailFailure(null)
+            })
+
+            loginEditPassword.addTextChangedListener(watcher)
+            loginEditPassword.addTextChangedListener(TxtWatcher {
+                displayPasswordFailure(null)
+            })
 
             loginBtnEnter.setOnClickListener {
-                loginBtnEnter.showProgress(true)
+                presenter.login(loginEditEmail.text.toString(), loginEditPassword.text.toString())
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    loginBtnEnter.showProgress(false)
-                }, 2000)
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    loginBtnEnter.showProgress(false)
+//                }, 2000)
             }
         }
     }
 
-    private val watcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    override fun onDestroy() {
+        presenter.onDestroy()
+        super.onDestroy()
+    }
 
-        }
+    private val watcher = TxtWatcher {
+        binding.loginBtnEnter.isEnabled = binding.loginEditEmail.text.toString().isNotEmpty() &&
+                binding.loginEditPassword.text.toString().isNotEmpty()
+    }
 
-        override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            binding.loginBtnEnter.isEnabled = s.toString().isNotEmpty()
-        }
+    override fun showProgress(enabled: Boolean) {
+        binding.loginBtnEnter.showProgress(true)
+    }
 
-        override fun afterTextChanged(p0: Editable?) {
+    override fun displayEmailFailure(emailError: Int?) {
+        binding.loginEditEmailInput.error = emailError?.let { getString(it) }
+    }
 
-        }
+    override fun displayPasswordFailure(passwordError: Int?) {
+        binding.loginEditPasswordInput.error = passwordError?.let { getString(it) }
+    }
+
+    override fun onUserAuthenticated() {
+        // Ir para tela principal
+    }
+
+    override fun onUserUnauthorized() {
+        // mostrar alerta
     }
 }
