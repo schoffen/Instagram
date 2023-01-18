@@ -15,6 +15,7 @@ import com.example.instagram.login.data.FakeDataSource
 import com.example.instagram.login.data.LoginRepository
 import com.example.instagram.login.presentation.LoginPresenter
 import com.example.instagram.main.view.MainActivity
+import com.example.instagram.register.view.RegisterActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
@@ -45,7 +46,15 @@ class LoginActivity : AppCompatActivity(), Login.View {
             loginBtnEnter.setOnClickListener {
                 presenter.login(loginEditEmail.text.toString(), loginEditPassword.text.toString())
             }
+
+            loginTxtRegister.setOnClickListener {
+                goToRegisterScreen()
+            }
         }
+    }
+
+    private fun goToRegisterScreen() {
+        startActivity(Intent(this, RegisterActivity::class.java))
     }
 
     override fun onDestroy() {
