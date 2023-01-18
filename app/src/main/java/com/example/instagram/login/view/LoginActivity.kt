@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import com.example.instagram.common.base.DependencyInjector
 import com.example.instagram.common.util.TxtWatcher
 import com.example.instagram.databinding.ActivityLoginBinding
 import com.example.instagram.login.Login
@@ -28,8 +29,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
         setContentView(binding.root)
 
-        val repository = LoginRepository(FakeDataSource())
-        presenter = LoginPresenter(this, repository)
+        presenter = LoginPresenter(this, DependencyInjector.loginRepository())
 
         with(binding) {
             loginEditEmail.addTextChangedListener(watcher)
