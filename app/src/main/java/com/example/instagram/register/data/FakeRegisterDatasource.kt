@@ -3,9 +3,11 @@ package com.example.instagram.register.data
 import android.os.Handler
 import android.os.Looper
 import com.example.instagram.common.model.Database
+import com.example.instagram.common.model.UserAuth
+import java.util.UUID
 
-class FakeRegisterDatasource : RegisterEmailDatasource{
-    override fun create(email: String, callback: RegisterEmailCallback) {
+class FakeRegisterDatasource : RegisterDatasource{
+    override fun create(email: String, callback: RegisterCallback) {
         Handler(Looper.getMainLooper()).postDelayed({
 
             val userAuth = Database.usersAuth.firstOrNull { email == it.email }
@@ -17,6 +19,29 @@ class FakeRegisterDatasource : RegisterEmailDatasource{
             }
 
             callback.onComplete()
-        }, 2000)
+        }, 500)
+    }
+
+    override fun create(name: String, email: String, password: String, callback: RegisterCallback) {
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            val userAuth = Database.usersAuth.firstOrNull { email == it.email }
+
+            if (userAuth != null) {
+                callback.onFailure("Usuario já cadastrado")
+            } else {
+                val created = Database.usersAuth.add(
+                    UserAuth(UUID.randomUUID().toString(), name, email, password)
+                )
+
+                if (created) {
+                    callback.onSuccess()
+                } else {
+                    callback.onFailure("Erro interno no servidor.")
+                }
+            }
+
+            callback.onComplete()
+        }, 500)
     }
 }

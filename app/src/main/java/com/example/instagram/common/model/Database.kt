@@ -10,11 +10,11 @@ object Database {
 
     init {
         usersAuth.add(
-            UserAuth(UUID.randomUUID().toString(), "userA@gmail.com", "12345678")
+            UserAuth(UUID.randomUUID().toString(), "User A", "userA@gmail.com", "12345678")
         )
 
         usersAuth.add(
-            UserAuth(UUID.randomUUID().toString(), "userB@gmail.com", "87654321")
+            UserAuth(UUID.randomUUID().toString(), "User B",  "userB@gmail.com", "87654321")
         )
     }
 

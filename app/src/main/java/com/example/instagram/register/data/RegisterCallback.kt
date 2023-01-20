@@ -1,8 +1,6 @@
 package com.example.instagram.register.data
 
-import com.example.instagram.common.model.UserAuth
-
-interface RegisterEmailCallback {
+interface RegisterCallback {
     fun onSuccess()
     fun onFailure(message: String)
     fun onComplete()
