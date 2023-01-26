@@ -109,6 +109,7 @@ class RegisterNamePasswordFragment : Fragment(R.layout.fragment_register_name_pa
 
     override fun onDestroy() {
         binding = null
+        fragmentAttachListener = null
         presenter.onDestroy()
         super.onDestroy()
     }

@@ -43,6 +43,7 @@ class RegisterWelcomeFragment : Fragment(R.layout.fragment_register_welcome) {
 
     override fun onDestroy() {
         binding = null
+        fragmentAttachListener = null
         super.onDestroy()
     }
 

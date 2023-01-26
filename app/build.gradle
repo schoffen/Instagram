@@ -3,19 +3,23 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+
+
 android {
     namespace 'com.example.instagram'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.instagram"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+
 
     buildTypes {
         release {
@@ -37,6 +41,9 @@ android {
 
 dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.vanniktech:android-image-cropper:4.5.0'
+
+    implementation 'androidx.fragment:fragment-ktx:1.5.5'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.4.0'
