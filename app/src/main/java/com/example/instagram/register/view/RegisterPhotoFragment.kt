@@ -8,18 +8,23 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.example.instagram.R
+import com.example.instagram.common.base.DependencyInjector
 import com.example.instagram.common.view.CropperImageFragment
 import com.example.instagram.common.view.CustomDialog
 import com.example.instagram.databinding.FragmentRegisterPhotoBinding
+import com.example.instagram.register.RegisterPhoto
+import com.example.instagram.register.presentation.RegisterPhotoPresenter
 
-class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
+class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo), RegisterPhoto.View {
 
     private var binding: FragmentRegisterPhotoBinding? = null
     private var fragmentAttachListener: FragmentAttachListener? = null
+    override lateinit var presenter: RegisterPhoto.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,9 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
 
         binding = FragmentRegisterPhotoBinding.bind(view)
 
+        val repository = DependencyInjector.registerEmailRepository()
+        presenter = RegisterPhotoPresenter(this, repository)
+
         binding?.let {
             with(it) {
                 registerBtJump.setOnClickListener {
@@ -47,6 +55,18 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
                 }
             }
         }
+    }
+
+    override fun showProgress(enabled: Boolean) {
+        binding?.registerPhotoBtnNext?.showProgress(enabled)
+    }
+
+    override fun onUpdateFailure(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onUpdateSuccess() {
+        fragmentAttachListener?.goToMainScreen()
     }
 
     override fun onAttach(context: Context) {
@@ -77,18 +97,18 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
 
     private fun onCropImageResult(uri: Uri?) {
         if (uri != null) {
-            if (Build.VERSION.SDK_INT >= 28) {
+            val newBitmap = if (Build.VERSION.SDK_INT >= 28) {
                 val source = android.graphics.ImageDecoder.createSource(
                     requireContext().contentResolver,
                     uri
                 )
-                val newBitmap = android.graphics.ImageDecoder.decodeBitmap(source)
-                binding?.registerImgProfile?.setImageBitmap(newBitmap)
+                ImageDecoder.decodeBitmap(source)
             } else {
-                val newBitmap =
-                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
-                binding?.registerImgProfile?.setImageBitmap(newBitmap)
+                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
             }
+            binding?.registerImgProfile?.setImageBitmap(newBitmap)
+
+            presenter.updateUser(uri)
 
         }
     }
@@ -96,6 +116,7 @@ class RegisterPhotoFragment : Fragment(R.layout.fragment_register_photo) {
     override fun onDestroy() {
         binding = null
         fragmentAttachListener = null
+        presenter.onDestroy()
         super.onDestroy()
     }
 
