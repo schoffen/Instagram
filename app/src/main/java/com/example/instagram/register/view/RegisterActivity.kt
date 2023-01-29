@@ -11,6 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.instagram.R
+import com.example.instagram.common.extension.hideKeyBoard
+import com.example.instagram.common.extension.replaceFragment
 import com.example.instagram.common.view.CropperImageFragment
 import com.example.instagram.databinding.ActivityRegisterBinding
 import com.example.instagram.main.view.MainActivity
@@ -113,18 +115,8 @@ class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        if (supportFragmentManager.findFragmentById(R.id.register_fragment) == null) {
-            supportFragmentManager.beginTransaction().apply {
-                add(R.id.register_fragment, fragment)
-                commit()
-            }
-        } else {
-            supportFragmentManager.beginTransaction().apply {
-                replace(R.id.register_fragment, fragment)
-                addToBackStack(null)
-                commit()
-            }
-        }
+        replaceFragment(R.id.register_fragment, fragment)
+        hideKeyBoard()
     }
 
     private fun openImageCropper(uri: Uri) {

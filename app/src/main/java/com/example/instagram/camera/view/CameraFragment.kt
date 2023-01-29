@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.instagram.R
 import com.example.instagram.databinding.FragmentCameraBinding
 
-class FragmentCamera : Fragment(R.layout.fragment_camera) {
+class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     private var binding: FragmentCameraBinding? = null
 

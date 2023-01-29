@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.databinding.FragmentProfileBinding
 
-class FragmentProfile : Fragment(R.layout.fragment_profile) {
+class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var binding: FragmentProfileBinding? = null
 

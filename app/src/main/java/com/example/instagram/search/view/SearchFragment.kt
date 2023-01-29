@@ -1,23 +1,17 @@
-package com.example.instagram.home.view
+package com.example.instagram.search.view
 
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
-import com.example.instagram.databinding.FragmentHomeBinding
+import com.example.instagram.databinding.FragmentSearchBinding
 
-class FragmentHome : Fragment(R.layout.fragment_home) {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    private var binding: FragmentHomeBinding? = null
-
-    override fun onDestroy() {
-        binding = null
-        super.onDestroy()
-    }
+    private var binding: FragmentSearchBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,17 +26,17 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentHomeBinding.bind(view)
+        binding = FragmentSearchBinding.bind(view)
 
-        binding?.homeRv?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.homeRv?.adapter = PostAdapter()
+        binding?.searchRv?.layoutManager = LinearLayoutManager(requireContext())
+        binding?.searchRv?.adapter = PostAdapter()
     }
 
     private class PostAdapter : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
             return PostViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.item_post_list, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.item_user_list, parent, false)
             )
         }
 
@@ -56,7 +50,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
 
         private class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             fun bind(image: Int) {
-                itemView.findViewById<ImageView>(R.id.home_img_post).setImageResource(image)
+                itemView.findViewById<ImageView>(R.id.search_img_user).setImageResource(image)
             }
         }
     }
