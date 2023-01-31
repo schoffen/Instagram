@@ -146,10 +146,10 @@
         android:id="@+id/profile_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:layout_gravity="center"/>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/profile_txt_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

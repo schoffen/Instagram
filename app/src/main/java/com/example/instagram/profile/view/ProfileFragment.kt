@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.common.base.BaseFragment
+import com.example.instagram.common.base.DependencyInjector
 import com.example.instagram.common.model.Post
 import com.example.instagram.common.model.UserAuth
 import com.example.instagram.databinding.FragmentProfileBinding
+import com.example.instagram.profile.Profile
+import com.example.instagram.profile.presentation.ProfilePresenter
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     R.layout.fragment_profile,
@@ -25,10 +28,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     override fun setupViews() {
         binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
         binding?.profileRv?.adapter = adapter
+
+        presenter.fetchUserProfile()
     }
 
     override fun setupPresenter() {
-        TODO("Not yet implemented")
+        presenter = ProfilePresenter(this, DependencyInjector.profileRepository())
     }
 
     override fun getMenu(): Int {
