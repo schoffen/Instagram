@@ -15,6 +15,7 @@ import com.example.instagram.common.model.UserAuth
 import com.example.instagram.databinding.FragmentProfileBinding
 import com.example.instagram.profile.Profile
 import com.example.instagram.profile.presentation.ProfilePresenter
+import com.example.instagram.profile.presentation.ProfileState
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     R.layout.fragment_profile,
@@ -25,11 +26,41 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
 
     private val adapter = PostAdapter()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.subscribe(
+            if (savedInstanceState != null) {
+                ProfileState(
+                    (savedInstanceState.getParcelableArray("posts") as Array<Post>).toList(),
+                    savedInstanceState.getParcelable("user")
+                )
+            } else {
+                null
+            }
+        )
+    }
+
+//    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+//        if (savedInstanceState != null) {
+//            val state = savedInstanceState.getParcelable<UserAuth?>("myState")
+//            state?.let {
+//                displayUserProfile(it)
+//            }
+//        }
+//        super.onViewStateRestored(savedInstanceState)
+//    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelable("user", presenter.getState().fetchUserProfile())
+        outState.putParcelableArray("posts", presenter.getState().fetchUserPosts()?.toTypedArray())
+        super.onSaveInstanceState(outState)
+    }
+
     override fun setupViews() {
         binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
         binding?.profileRv?.adapter = adapter
 
-        presenter.fetchUserProfile()
+//        presenter.fetchUserProfile()
     }
 
     override fun setupPresenter() {
@@ -50,7 +81,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileTxtFollowersCount?.text = userAuth.followersCount.toString()
         binding?.profileTxtUsername?.text = userAuth.name
         binding?.profileTxtProfileBio?.text = "TODO"
-        presenter.fetchUserPosts()
+//        presenter.fetchUserPosts()
     }
 
     override fun displayRequestFailure(message: String) {

@@ -32,7 +32,9 @@ abstract class BaseFragment<T, P : BasePresenter>(
 
         binding = bind(view)
 
-        setupViews()
+        if (savedInstanceState == null) {
+            setupViews()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
