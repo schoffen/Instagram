@@ -16,13 +16,13 @@ class ProfileDataSourceFactory(
         if (profileCache.isCached()) {
             return ProfileLocalDataSource(profileCache, postsCache)
         }
-        return FakeProfileRemoteDataSource()
+        return ProfileFakeRemoteDataSource()
     }
 
     fun createFromPosts(): ProfileDataSource {
         if (postsCache.isCached()) {
             return ProfileLocalDataSource(profileCache, postsCache)
         }
-        return FakeProfileRemoteDataSource()
+        return ProfileFakeRemoteDataSource()
     }
 }

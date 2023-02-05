@@ -7,7 +7,7 @@ import com.example.instagram.common.model.Database
 import com.example.instagram.common.model.Post
 import com.example.instagram.common.model.UserAuth
 
-class FakeProfileRemoteDataSource : ProfileDataSource {
+class ProfileFakeRemoteDataSource : ProfileDataSource {
     override fun fetchUserProfile(userUUID: String, callback: RequestCallback<UserAuth>) {
         Handler(Looper.getMainLooper()).postDelayed({
             val userAuth = Database.usersAuth.firstOrNull { userUUID == it.uuid }

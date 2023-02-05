@@ -1,5 +1,8 @@
 package com.example.instagram.common.base
 
+import com.example.instagram.home.data.FeedListMemoryCache
+import com.example.instagram.home.data.HomeDataSourceFactory
+import com.example.instagram.home.data.HomeRepository
 import com.example.instagram.login.data.FakeDataSource
 import com.example.instagram.login.data.LoginRepository
 import com.example.instagram.profile.data.*
@@ -23,5 +26,9 @@ object DependencyInjector {
 
     fun profileRepository() : ProfileRepository {
         return ProfileRepository(ProfileDataSourceFactory(ProfileMemoryCache, PostListMemoryCache))
+    }
+
+    fun homeRepository() : HomeRepository {
+        return HomeRepository(HomeDataSourceFactory(FeedListMemoryCache))
     }
 }
