@@ -7,17 +7,9 @@ import com.example.instagram.common.model.UserAuth
 
 interface Profile {
 
-    interface StatefulPresenter<S: State>: BasePresenter {
-        fun subscribe(state: S?)
-        fun getState(): S
-    }
-
-    interface State {
-        fun fetchUserProfile() : UserAuth?
-        fun fetchUserPosts()  : List<Post>?
-    }
-
-    interface Presenter : StatefulPresenter<State> {
+    interface Presenter : BasePresenter {
+        fun fetchUserProfile()
+        fun fetchUserPosts()
     }
 
     interface View : BaseView<Presenter> {
