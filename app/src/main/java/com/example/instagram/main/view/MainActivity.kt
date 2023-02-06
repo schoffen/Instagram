@@ -9,7 +9,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.instagram.R
-import com.example.instagram.camera.view.CameraFragment
+import com.example.instagram.add.view.AddFragment
+import com.example.instagram.add.view.CameraFragment
 import com.example.instagram.common.extension.replaceFragment
 import com.example.instagram.databinding.ActivityMainBinding
 import com.example.instagram.home.view.HomeFragment
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private lateinit var homeFragment: HomeFragment
     private lateinit var searchFragment: SearchFragment
-    private lateinit var cameraFragment: CameraFragment
+    private lateinit var addFragment: AddFragment
     private lateinit var profileFragment: ProfileFragment
     private var currentFragment: Fragment? = null
 
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         homeFragment = HomeFragment()
         searchFragment = SearchFragment()
-        cameraFragment = CameraFragment()
+        addFragment = AddFragment()
         profileFragment = ProfileFragment()
 
 //        currentFragment = homeFragment
@@ -74,8 +75,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
 
             R.id.menu_bottom_add -> {
-                if (currentFragment == cameraFragment) return false
-                currentFragment = cameraFragment
+                if (currentFragment == addFragment) return false
+                currentFragment = addFragment
             }
 
             R.id.menu_bottom_profile -> {

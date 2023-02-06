@@ -1,14 +1,15 @@
-package com.example.instagram.camera.view
+package com.example.instagram.add.view
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.example.instagram.R
 import com.example.instagram.databinding.FragmentCameraBinding
+import com.example.instagram.databinding.FragmentGalleryBinding
 
-class CameraFragment : Fragment(R.layout.fragment_camera) {
+class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
-    private var binding: FragmentCameraBinding? = null
+    private var binding: FragmentGalleryBinding? = null
 
     override fun onDestroy() {
         binding = null
@@ -18,6 +19,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentCameraBinding.bind(view)
+        binding = FragmentGalleryBinding.bind(view)
     }
 }
