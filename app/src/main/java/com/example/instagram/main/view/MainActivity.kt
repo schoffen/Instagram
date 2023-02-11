@@ -19,7 +19,7 @@ import com.example.instagram.search.view.SearchFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, AddFragment.AddListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -109,5 +109,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             coordinatorParams.behavior = null
         }
         binding.mainAppbar.layoutParams = coordinatorParams
+    }
+
+    override fun onPostCreated() {
+        homeFragment.presenter.clear()
+        binding.mainBottomNav.selectedItemId = R.id.menu_bottom_home
     }
 }

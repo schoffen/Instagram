@@ -26,4 +26,9 @@ class HomeRepository(private val dataSourceFactory: HomeDataSourceFactory) {
 
         callback.onComplete()
     }
+
+    fun clearCache() {
+        val localDataSource = dataSourceFactory.createLocalDataSource()
+        localDataSource.putFeed(null)
+    }
 }

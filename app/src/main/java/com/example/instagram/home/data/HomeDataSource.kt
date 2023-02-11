@@ -8,5 +8,5 @@ import java.util.UUID
 interface HomeDataSource {
     fun fetchFeed(userUUID: String, callback: RequestCallback<List<Post>>)
     fun fetchSession() : UserAuth { throw UnsupportedOperationException() }
-    fun putFeed(response: List<Post>) { throw UnsupportedOperationException() }
+    fun putFeed(response: List<Post>?) { throw UnsupportedOperationException() }
 }

@@ -4,18 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.common.model.Post
+import com.example.instagram.databinding.ItemPostListBinding
 
 class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
 
     var items: List<Post> = mutableListOf<Post>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
-        return FeedViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_post_list, parent, false)
-        )
+        val binding = ItemPostListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return FeedViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
@@ -26,9 +27,11 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
         return items.size
     }
 
-    class FeedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class FeedViewHolder(private val binding: ItemPostListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) {
-            itemView.findViewById<ImageView>(R.id.home_img_post).setImageURI(post.uri)
+            binding.homeImgPost.setImageURI(post.uri)
+            binding.homeTxtCaption.text = post.caption
+            binding.homeTxtUsername.text = post.publisher.name
         }
     }
 }
