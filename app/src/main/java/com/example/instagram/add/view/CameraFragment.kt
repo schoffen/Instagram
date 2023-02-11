@@ -10,7 +10,9 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.example.instagram.R
 import com.example.instagram.common.util.Files
@@ -34,6 +36,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
         binding?.cameraImgPicture?.setOnClickListener {
             takePhoto()
+            binding?.cameraImgPicture?.isEnabled = false
         }
     }
 
@@ -59,12 +62,11 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             outputOptions, ContextCompat.getMainExecutor(requireContext()), object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    Log.e("teste", savedUri.toString())
-                    // delegar uri para o presenter
+                    binding?.cameraImgPicture?.isEnabled = true
+                    setFragmentResult("takePhotoKey", bundleOf("uri" to savedUri))
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    TODO("Not yet implemented")
                 }
             })
     }

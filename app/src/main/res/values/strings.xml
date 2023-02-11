@@ -47,4 +47,5 @@
     <string name="bio_tools">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse velit nisi, aliquet id placerat quis, ultrices non nisl.</string>
     <string name="empty_list">Nenhum registro encontrado.</string>
     <string name="permission_camera_denied">Permissão não concedida. Habilite nas configurações.</string>
+    <string name="write_caption_hint">Escreva uma legenda</string>
 </resources>
