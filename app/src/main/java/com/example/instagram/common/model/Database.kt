@@ -4,8 +4,7 @@ import java.util.UUID
 
 object Database {
 
-    val usersAuth = hashSetOf<UserAuth>()
-    val photos = hashSetOf<Photo>()
+    val usersAuth = mutableListOf<UserAuth>()
     val posts = hashMapOf<String, MutableSet<Post>>()
     val feeds = hashMapOf<String, MutableSet<Post>>()
     val followers = hashMapOf<String, Set<String>>()
@@ -13,8 +12,10 @@ object Database {
     var sessionAuth: UserAuth? = null
 
     init {
-        val userA = UserAuth(UUID.randomUUID().toString(), "User A", "userA@gmail.com", "12345678")
-        val userB = UserAuth(UUID.randomUUID().toString(), "User B",  "userB@gmail.com", "87654321")
+        val userA =
+            UserAuth(UUID.randomUUID().toString(), "User A", "userA@gmail.com", "12345678", null)
+        val userB =
+            UserAuth(UUID.randomUUID().toString(), "User B", "userB@gmail.com", "87654321", null)
 
         usersAuth.add(userA)
         usersAuth.add(userB)

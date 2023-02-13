@@ -47,6 +47,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileTxtUsername?.text = userAuth.name
         binding?.profileTxtProfileBio?.text = "TODO"
 
+        if (userAuth.photoUri != null) {
+            binding?.profileImgIcon?.setImageURI(userAuth.photoUri)
+        }
+
         presenter.fetchUserPosts()
     }
 

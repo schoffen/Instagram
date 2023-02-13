@@ -4,11 +4,10 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import com.example.instagram.common.model.Database
-import com.example.instagram.common.model.Photo
 import com.example.instagram.common.model.UserAuth
 import java.util.UUID
 
-class FakeRegisterDatasource : RegisterDatasource{
+class FakeRegisterDatasource : RegisterDatasource {
     override fun create(email: String, callback: RegisterCallback) {
         Handler(Looper.getMainLooper()).postDelayed({
 
@@ -32,7 +31,7 @@ class FakeRegisterDatasource : RegisterDatasource{
             if (userAuth != null) {
                 callback.onFailure("Usuario já cadastrado")
             } else {
-                val newUser = UserAuth(UUID.randomUUID().toString(), name, email, password)
+                val newUser = UserAuth(UUID.randomUUID().toString(), name, email, password, null)
 
                 val created = Database.usersAuth.add(newUser)
 
@@ -61,15 +60,11 @@ class FakeRegisterDatasource : RegisterDatasource{
             if (userAuth == null) {
                 callback.onFailure("Usuario não encontrado")
             } else {
-                val newPhoto = Photo(userAuth.uuid, photoUri)
+                val index = Database.usersAuth.indexOf(Database.sessionAuth)
+                Database.usersAuth[index] = Database.sessionAuth!!.copy(photoUri = photoUri)
+                Database.sessionAuth = Database.usersAuth[index]
 
-                val created = Database.photos.add(newPhoto)
-
-                if (created) {
-                    callback.onSuccess()
-                } else {
-                    callback.onFailure("Erro interno no servidor.")
-                }
+                callback.onSuccess()
             }
 
             callback.onComplete()
