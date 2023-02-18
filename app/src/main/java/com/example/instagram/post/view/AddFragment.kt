@@ -1,6 +1,7 @@
-package com.example.instagram.add.view
+package com.example.instagram.post.view
 
 import android.Manifest.permission.CAMERA
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,8 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.example.instagram.R
-import com.example.instagram.add.Add
-import com.example.instagram.common.base.BaseFragment
+import com.example.instagram.add.view.AddActivity
 import com.example.instagram.databinding.FragmentAddBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -91,27 +91,33 @@ class AddFragment : Fragment(R.layout.fragment_add) {
 
     }
 
-    private fun allPermissionsGranted() = ContextCompat.checkSelfPermission(
-        requireContext(),
-        REQUIRED_PERMISSION
-    ) == PackageManager.PERMISSION_GRANTED
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(
+            requireContext(), REQUIRED_PERMISSION[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            requireContext(), REQUIRED_PERMISSION[1]) == PackageManager.PERMISSION_GRANTED
 
     private fun startCamera() {
         setFragmentResult("cameraKey", bundleOf("startCamera" to true))
     }
 
-    private val addActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            addListener?.onPostCreated()
+    private val addActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                addListener?.onPostCreated()
+            }
         }
-    }
 
     private val getPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(requireContext(), R.string.permission_camera_denied, Toast.LENGTH_LONG)
+                Toast.makeText(
+                    requireContext(),
+                    R.string.permission_camera_denied,
+                    Toast.LENGTH_LONG
+                )
                     .show()
             }
         }
@@ -121,6 +127,6 @@ class AddFragment : Fragment(R.layout.fragment_add) {
     }
 
     companion object {
-        private const val REQUIRED_PERMISSION = android.Manifest.permission.CAMERA
+        private val REQUIRED_PERMISSION = arrayOf(CAMERA, READ_EXTERNAL_STORAGE)
     }
 }

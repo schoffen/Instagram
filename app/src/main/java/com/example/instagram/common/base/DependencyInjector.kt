@@ -1,5 +1,6 @@
 package com.example.instagram.common.base
 
+import android.content.Context
 import com.example.instagram.add.data.AddFakeRemoteDataSource
 import com.example.instagram.add.data.AddLocalDataSource
 import com.example.instagram.add.data.AddRepository
@@ -8,6 +9,8 @@ import com.example.instagram.home.data.HomeDataSourceFactory
 import com.example.instagram.home.data.HomeRepository
 import com.example.instagram.login.data.FakeDataSource
 import com.example.instagram.login.data.LoginRepository
+import com.example.instagram.post.data.PostLocalDataSource
+import com.example.instagram.post.data.PostRepository
 import com.example.instagram.profile.data.*
 import com.example.instagram.register.data.FakeRegisterDatasource
 import com.example.instagram.register.data.RegisterRepository
@@ -37,5 +40,9 @@ object DependencyInjector {
 
     fun addRepository() : AddRepository {
         return AddRepository(AddFakeRemoteDataSource(), AddLocalDataSource())
+    }
+
+    fun postRepository(context: Context) : PostRepository {
+        return PostRepository(PostLocalDataSource(context))
     }
 }

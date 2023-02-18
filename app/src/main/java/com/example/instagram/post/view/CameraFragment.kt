@@ -1,8 +1,7 @@
-package com.example.instagram.add.view
+package com.example.instagram.post.view
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import android.view.*
 import androidx.camera.core.CameraSelector

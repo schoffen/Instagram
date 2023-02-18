@@ -9,8 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.instagram.R
-import com.example.instagram.add.view.AddFragment
-import com.example.instagram.add.view.CameraFragment
+import com.example.instagram.post.view.AddFragment
 import com.example.instagram.common.extension.replaceFragment
 import com.example.instagram.databinding.ActivityMainBinding
 import com.example.instagram.home.view.HomeFragment
@@ -77,6 +76,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.menu_bottom_add -> {
                 if (currentFragment == addFragment) return false
                 currentFragment = addFragment
+                scrollToolbarEnabled = false
             }
 
             R.id.menu_bottom_profile -> {
