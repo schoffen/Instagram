@@ -32,6 +32,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
             binding.homeImgPost.setImageURI(post.uri)
             binding.homeTxtCaption.text = post.caption
             binding.homeTxtUsername.text = post.publisher.name
+            binding.homeImgUser.setImageURI(post.publisher.photoUri)
         }
     }
 }

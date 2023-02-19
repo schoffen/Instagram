@@ -3,6 +3,7 @@ package com.example.instagram.profile.view
 import android.view.*
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instagram.R
 import com.example.instagram.common.base.BaseFragment
 import com.example.instagram.common.base.DependencyInjector
@@ -11,11 +12,12 @@ import com.example.instagram.common.model.UserAuth
 import com.example.instagram.databinding.FragmentProfileBinding
 import com.example.instagram.profile.Profile
 import com.example.instagram.profile.presentation.ProfilePresenter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     R.layout.fragment_profile,
     FragmentProfileBinding::bind
-), Profile.View {
+), Profile.View, BottomNavigationView.OnNavigationItemSelectedListener {
 
     override lateinit var presenter: Profile.Presenter
 
@@ -24,6 +26,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     override fun setupViews() {
         binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
         binding?.profileRv?.adapter = adapter
+
+        binding?.profileNavTabs?.setOnNavigationItemSelectedListener(this)
 
         presenter.fetchUserProfile()
     }
@@ -68,5 +72,19 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileRv?.visibility = View.VISIBLE
         adapter.items = posts
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_profile_grid -> {
+                binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
+            }
+
+            R.id.menu_profile_list -> {
+                binding?.profileRv?.layoutManager = LinearLayoutManager(requireContext())
+            }
+        }
+
+        return true
     }
 }
