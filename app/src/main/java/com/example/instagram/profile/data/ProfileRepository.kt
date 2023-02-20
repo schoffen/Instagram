@@ -3,22 +3,23 @@ package com.example.instagram.profile.data
 import com.example.instagram.common.base.RequestCallback
 import com.example.instagram.common.model.Post
 import com.example.instagram.common.model.UserAuth
-import java.util.UUID
 
 class ProfileRepository(private val dataSourceFactory: ProfileDataSourceFactory) {
     fun clearCache() {
         val localDataSource = dataSourceFactory.createLocalDataSource()
         localDataSource.putPosts(null)
     }
-    fun fetchUserProfile(callback: RequestCallback<UserAuth>) {
+    fun fetchUserProfile(uuid: String?, callback: RequestCallback<UserAuth>) {
         val localDataSource = dataSourceFactory.createLocalDataSource()
-        val userAuth = localDataSource.fetchSession()
+        val userID = uuid ?: localDataSource.fetchSession().uuid
 
-        val dataSource = dataSourceFactory.createFromUser()
+        val dataSource = dataSourceFactory.createFromUser(uuid)
 
-        dataSource.fetchUserProfile(userAuth.uuid, object :  RequestCallback<UserAuth>{
+        dataSource.fetchUserProfile(userID, object :  RequestCallback<UserAuth>{
             override fun onSuccess(data: UserAuth) {
-                localDataSource.putUser(data)
+                if (uuid == null) {
+                    localDataSource.putUser(data)
+                }
                 callback.onSuccess(data)
             }
 
@@ -32,15 +33,17 @@ class ProfileRepository(private val dataSourceFactory: ProfileDataSourceFactory)
         callback.onComplete()
     }
 
-    fun fetchUserPosts(callback: RequestCallback<List<Post>>) {
+    fun fetchUserPosts(uuid: String?, callback: RequestCallback<List<Post>>) {
         val localDataSource = dataSourceFactory.createLocalDataSource()
-        val userAuth = localDataSource.fetchSession()
+        val userID = uuid ?: localDataSource.fetchSession().uuid
 
-        val dataSource = dataSourceFactory.createFromPosts()
+        val dataSource = dataSourceFactory.createFromPosts(uuid)
 
-        dataSource.fetchUserPosts(userAuth.uuid, object :  RequestCallback<List<Post>>{
+        dataSource.fetchUserPosts(userID, object :  RequestCallback<List<Post>>{
             override fun onSuccess(data: List<Post>) {
-                localDataSource.putPosts(data)
+                if (uuid == null) {
+                    localDataSource.putPosts(data)
+                }
                 callback.onSuccess(data)
             }
 

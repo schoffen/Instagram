@@ -1,5 +1,6 @@
 package com.example.instagram.profile.view
 
+import android.annotation.SuppressLint
 import android.view.*
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,14 +23,17 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
     override lateinit var presenter: Profile.Presenter
 
     private val adapter = PostAdapter()
+    private var uuid: String? = null
 
     override fun setupViews() {
+        uuid = arguments?.getString(KEY_USER_ID)
+
         binding?.profileRv?.layoutManager = GridLayoutManager(requireContext(), 3)
         binding?.profileRv?.adapter = adapter
 
         binding?.profileNavTabs?.setOnNavigationItemSelectedListener(this)
 
-        presenter.fetchUserProfile()
+        presenter.fetchUserProfile(uuid)
     }
 
     override fun setupPresenter() {
@@ -55,7 +59,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
             binding?.profileImgIcon?.setImageURI(userAuth.photoUri)
         }
 
-        presenter.fetchUserPosts()
+        presenter.fetchUserPosts(uuid)
     }
 
     override fun displayRequestFailure(message: String) {
@@ -67,6 +71,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileRv?.visibility = View.GONE
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun displayFullPosts(posts: List<Post>) {
         binding?.profileTxtEmpty?.visibility = View.GONE
         binding?.profileRv?.visibility = View.VISIBLE
@@ -86,5 +91,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         }
 
         return true
+    }
+
+    companion object {
+        const val KEY_USER_ID = "key_user_id"
     }
 }

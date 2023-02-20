@@ -1,14 +1,11 @@
 package com.example.instagram.search.view
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
-import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.instagram.R
 import com.example.instagram.common.base.BaseFragment
 import com.example.instagram.common.base.DependencyInjector
@@ -24,7 +21,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
 
     override lateinit var presenter: Search.Presenter
 
-    private val adapter = SearchAdapter()
+    private val adapter by lazy { SearchAdapter(onItemClicked) }
+
+    private var searchListener: SearchListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SearchListener) {
+            searchListener = context
+        }
+    }
 
     override fun setupViews() {
         binding?.searchRv?.layoutManager = LinearLayoutManager(requireContext())
@@ -35,8 +41,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
         presenter = SearchPresenter(this, DependencyInjector.searchRepository())
     }
 
+    private val onItemClicked: (String) -> Unit = { uuid ->
+        searchListener?.goToProfile(uuid)
+    }
+
     override fun getMenu(): Int = R.menu.menu_search
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
@@ -65,6 +76,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
         binding?.searchProgress?.visibility = if (enable) View.VISIBLE else View.GONE
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun displayFullUsers(users: List<UserAuth>) {
         binding?.searchTxtEmpty?.visibility = View.GONE
         binding?.searchRv?.visibility = View.VISIBLE
@@ -75,5 +87,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
     override fun displayEmptyUsers() {
         binding?.searchTxtEmpty?.visibility = View.VISIBLE
         binding?.searchRv?.visibility = View.GONE
+    }
+
+    interface SearchListener {
+        fun goToProfile(uuid: String)
     }
 }
