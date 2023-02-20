@@ -33,6 +33,18 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
 
         binding?.profileNavTabs?.setOnNavigationItemSelectedListener(this)
 
+        binding?.profileBtnEditProfile?.setOnClickListener {
+            if (it.tag == true) {
+                binding?.profileBtnEditProfile?.text = getString(R.string.follow)
+                binding?.profileBtnEditProfile?.tag = false
+                presenter.followUser(uuid, false)
+            } else if (it.tag == false) {
+                binding?.profileBtnEditProfile?.text = getString(R.string.unfollow)
+                binding?.profileBtnEditProfile?.tag = true
+                presenter.followUser(uuid, true)
+            }
+        }
+
         presenter.fetchUserProfile(uuid)
     }
 
@@ -48,16 +60,23 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, Profile.Presenter>(
         binding?.profileProgress?.visibility = if (enabled) View.VISIBLE else View.GONE
     }
 
-    override fun displayUserProfile(userAuth: UserAuth) {
+    override fun displayUserProfile(user: Pair<UserAuth, Boolean?>) {
+        val (userAuth, following) = user
+
         binding?.profileTxtPostsCount?.text = userAuth.postCount.toString()
         binding?.profileTxtFollowingCount?.text = userAuth.followingCount.toString()
         binding?.profileTxtFollowersCount?.text = userAuth.followersCount.toString()
         binding?.profileTxtUsername?.text = userAuth.name
         binding?.profileTxtProfileBio?.text = "TODO"
+        binding?.profileImgIcon?.setImageURI(userAuth.photoUri)
 
-        if (userAuth.photoUri != null) {
-            binding?.profileImgIcon?.setImageURI(userAuth.photoUri)
+        binding?.profileBtnEditProfile?.text = when(following) {
+            null -> getString(R.string.edit_profile)
+            true -> getString(R.string.unfollow)
+            false -> getString(R.string.follow)
         }
+
+        binding?.profileBtnEditProfile?.tag = following
 
         presenter.fetchUserPosts(uuid)
     }

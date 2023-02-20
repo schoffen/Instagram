@@ -2,18 +2,27 @@ package com.example.instagram.profile.data
 
 import android.os.Handler
 import android.os.Looper
+import android.provider.ContactsContract.Data
 import com.example.instagram.common.base.RequestCallback
 import com.example.instagram.common.model.Database
 import com.example.instagram.common.model.Post
 import com.example.instagram.common.model.UserAuth
 
 class ProfileFakeRemoteDataSource : ProfileDataSource {
-    override fun fetchUserProfile(userUUID: String, callback: RequestCallback<UserAuth>) {
+    override fun fetchUserProfile(userUUID: String, callback: RequestCallback<Pair<UserAuth, Boolean?>>) {
         Handler(Looper.getMainLooper()).postDelayed({
             val userAuth = Database.usersAuth.firstOrNull { userUUID == it.uuid }
 
             if (userAuth != null) {
-                callback.onSuccess(userAuth)
+                if(userAuth == Database.sessionAuth) {
+                    callback.onSuccess(Pair(userAuth, null))
+                } else {
+                    val followings = Database.followers[Database.sessionAuth!!.uuid]
+
+                    val destUser = followings?.firstOrNull { it == userUUID }
+                    callback.onSuccess(Pair(userAuth, destUser != null))
+                }
+
             } else {
                 callback.onFailure("Usuário não encontrado")
             }
@@ -30,5 +39,29 @@ class ProfileFakeRemoteDataSource : ProfileDataSource {
 
             callback.onComplete()
         }, 500)
+    }
+
+    override fun followUser(
+        userUUID: String,
+        isFollow: Boolean,
+        callback: RequestCallback<Boolean>
+    ) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            var followers = Database.followers[Database.sessionAuth!!.uuid]
+
+            if (followers == null) {
+                followers = mutableSetOf()
+                Database.followers[Database.sessionAuth!!.uuid] = followers
+            }
+
+            if (isFollow) {
+                Database.followers[Database.sessionAuth!!.uuid]!!.add(userUUID)
+            } else {
+                Database.followers[Database.sessionAuth!!.uuid]!!.remove(userUUID)
+            }
+
+            callback.onSuccess(true)
+            callback.onComplete()
+        }, 100)
     }
 }
