@@ -14,6 +14,8 @@ import com.example.instagram.post.data.PostRepository
 import com.example.instagram.profile.data.*
 import com.example.instagram.register.data.FakeRegisterDatasource
 import com.example.instagram.register.data.RegisterRepository
+import com.example.instagram.search.data.SearchFakeRemoteDataSource
+import com.example.instagram.search.data.SearchRepository
 import com.example.instagram.splash.data.FakeLocalDataSource
 import com.example.instagram.splash.data.SplashRepository
 
@@ -28,6 +30,10 @@ object DependencyInjector {
 
     fun splashRepository() : SplashRepository {
         return SplashRepository(FakeLocalDataSource())
+    }
+
+    fun searchRepository() : SearchRepository {
+        return SearchRepository(SearchFakeRemoteDataSource())
     }
 
     fun profileRepository() : ProfileRepository {
