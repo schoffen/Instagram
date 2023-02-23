@@ -1,9 +1,8 @@
 package com.example.instagram.profile.presentation
 
 import com.example.instagram.common.base.RequestCallback
-import com.example.instagram.common.model.Database
 import com.example.instagram.common.model.Post
-import com.example.instagram.common.model.UserAuth
+import com.example.instagram.common.model.User
 import com.example.instagram.profile.Profile
 import com.example.instagram.profile.data.ProfileRepository
 
@@ -14,9 +13,9 @@ class ProfilePresenter(
 
     override fun fetchUserProfile(uuid: String?) {
         view?.showProgress(true)
-        val userUUID = Database.sessionAuth?.uuid ?: throw RuntimeException("user not found")
-        repository.fetchUserProfile(uuid, object : RequestCallback<Pair<UserAuth, Boolean?>> {
-            override fun onSuccess(data: Pair<UserAuth, Boolean?>) {
+        //val userUUID = Database.sessionAuth?.uuid ?: throw RuntimeException("user not found")
+        repository.fetchUserProfile(uuid, object : RequestCallback<Pair<User, Boolean?>> {
+            override fun onSuccess(data: Pair<User, Boolean?>) {
                 view?.displayUserProfile(data)
             }
 

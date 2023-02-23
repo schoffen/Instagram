@@ -1,24 +1,24 @@
 package com.example.instagram.profile.data
 
 import com.example.instagram.common.base.Cache
-import com.example.instagram.common.model.UserAuth
+import com.example.instagram.common.model.User
 
-object ProfileMemoryCache : Cache<Pair<UserAuth, Boolean?>> {
-    private var userAuth: Pair<UserAuth, Boolean?>? = null
+object ProfileMemoryCache : Cache<Pair<User, Boolean?>> {
+    private var user: Pair<User, Boolean?>? = null
 
     override fun isCached(): Boolean {
-        return userAuth != null
+        return user != null
     }
 
-    override fun get(key: String): Pair<UserAuth, Boolean?>? {
-        return if (userAuth?.first?.uuid == key) {
-            userAuth
+    override fun get(key: String): Pair<User, Boolean?>? {
+        return if (user?.first?.uuid == key) {
+            user
         } else {
             null
         }
     }
 
-    override fun put(data: Pair<UserAuth, Boolean?>?) {
-        this.userAuth = data
+    override fun put(data: Pair<User, Boolean?>?) {
+        this.user = data
     }
 }

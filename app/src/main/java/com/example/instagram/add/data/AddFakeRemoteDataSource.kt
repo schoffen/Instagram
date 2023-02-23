@@ -6,7 +6,6 @@ import com.example.instagram.common.base.RequestCallback
 import com.example.instagram.common.model.Database
 import com.example.instagram.common.model.Post
 import java.util.*
-import java.util.logging.Handler
 
 class AddFakeRemoteDataSource : AddDataSource {
     override fun createPost(
@@ -23,7 +22,7 @@ class AddFakeRemoteDataSource : AddDataSource {
                 Database.posts[userUUID] = posts
             }
 
-            val post = Post(UUID.randomUUID().toString(), uri, caption, System.currentTimeMillis(), Database.sessionAuth!!)
+            val post = Post(UUID.randomUUID().toString(), null, caption, System.currentTimeMillis(), null)
 
             posts.add(post)
 

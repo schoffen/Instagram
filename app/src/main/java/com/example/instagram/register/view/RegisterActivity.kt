@@ -10,7 +10,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -20,7 +20,6 @@ import com.example.instagram.common.extension.replaceFragment
 import com.example.instagram.common.view.CropperImageFragment
 import com.example.instagram.databinding.ActivityRegisterBinding
 import com.example.instagram.main.view.MainActivity
-import com.example.instagram.post.view.AddFragment
 import com.example.instagram.register.view.RegisterNamePasswordFragment.Companion.KEY_EMAIL
 import com.example.instagram.register.view.RegisterWelcomeFragment.Companion.KEY_NAME
 import java.io.File
@@ -93,23 +92,41 @@ class RegisterActivity : AppCompatActivity(), FragmentAttachListener {
     }
 
     override fun goToCameraScreen() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            val photoFile: File? = try {
-                createImageFile()
-            } catch (e: IOException) {
-                Log.e("RegisterActivity", e.message, e)
-                null
-            }
+        if (!checkCameraPermission()) {
+            requestCameraPermission()
+        } else {
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if (intent.resolveActivity(packageManager) != null) {
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (e: IOException) {
+                    Log.e("RegisterActivity", e.message, e)
+                    null
+                }
 
-            photoFile?.also {
-                val photoUri =
-                    FileProvider.getUriForFile(this, "com.example.instagram.fileprovider", it)
-                currentPhoto = photoUri
+                photoFile?.also {
+                    val photoUri =
+                        FileProvider.getUriForFile(this, "com.example.instagram.fileprovider", it)
+                    currentPhoto = photoUri
 
-                getCamera.launch(photoUri)
+                    getCamera.launch(photoUri)
+                }
             }
         }
+    }
+
+    private fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this, Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA),
+            1000
+        )
     }
 
     @Throws(IOException::class)

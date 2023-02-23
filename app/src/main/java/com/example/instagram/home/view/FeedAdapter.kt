@@ -1,12 +1,9 @@
 package com.example.instagram.home.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.instagram.R
+import com.bumptech.glide.Glide
 import com.example.instagram.common.model.Post
 import com.example.instagram.databinding.ItemPostListBinding
 
@@ -29,10 +26,12 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
 
     class FeedViewHolder(private val binding: ItemPostListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(post: Post) {
-            binding.homeImgPost.setImageURI(post.uri)
+
+            Glide.with(itemView.context).load(post.photoUrl).into(binding.homeImgPost)
+            Glide.with(itemView.context).load(post.publisher?.photoUrl).into(binding.homeImgUser)
+
             binding.homeTxtCaption.text = post.caption
-            binding.homeTxtUsername.text = post.publisher.name
-            binding.homeImgUser.setImageURI(post.publisher.photoUri)
+            binding.homeTxtUsername.text = post.publisher?.name
         }
     }
 }
