@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.instagram.R
 import com.example.instagram.common.base.BaseFragment
 import com.example.instagram.common.base.DependencyInjector
+import com.example.instagram.common.model.User
 import com.example.instagram.common.model.UserAuth
 import com.example.instagram.databinding.FragmentSearchBinding
 import com.example.instagram.search.Search
@@ -77,7 +78,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding, Search.Presenter>(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun displayFullUsers(users: List<UserAuth>) {
+    override fun displayFullUsers(users: List<User>) {
         binding?.searchTxtEmpty?.visibility = View.GONE
         binding?.searchRv?.visibility = View.VISIBLE
         adapter.items = users

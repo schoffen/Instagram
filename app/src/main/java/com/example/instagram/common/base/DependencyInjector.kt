@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.instagram.add.data.AddFakeRemoteDataSource
 import com.example.instagram.add.data.AddLocalDataSource
 import com.example.instagram.add.data.AddRepository
+import com.example.instagram.add.data.FireAddDataSource
 import com.example.instagram.home.data.FeedListMemoryCache
 import com.example.instagram.home.data.HomeDataSourceFactory
 import com.example.instagram.home.data.HomeRepository
@@ -16,6 +17,7 @@ import com.example.instagram.profile.data.*
 import com.example.instagram.register.data.FakeRegisterDatasource
 import com.example.instagram.register.data.FireRegisterDataSource
 import com.example.instagram.register.data.RegisterRepository
+import com.example.instagram.search.data.FireSearchDataSource
 import com.example.instagram.search.data.SearchFakeRemoteDataSource
 import com.example.instagram.search.data.SearchRepository
 import com.example.instagram.splash.data.FakeLocalDataSource
@@ -36,7 +38,7 @@ object DependencyInjector {
     }
 
     fun searchRepository() : SearchRepository {
-        return SearchRepository(SearchFakeRemoteDataSource())
+        return SearchRepository(FireSearchDataSource())
     }
 
     fun profileRepository() : ProfileRepository {
@@ -48,7 +50,7 @@ object DependencyInjector {
     }
 
     fun addRepository() : AddRepository {
-        return AddRepository(AddFakeRemoteDataSource(), AddLocalDataSource())
+        return AddRepository(FireAddDataSource(), AddLocalDataSource())
     }
 
     fun postRepository(context: Context) : PostRepository {
